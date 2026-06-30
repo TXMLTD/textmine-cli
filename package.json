@@ -15,6 +15,7 @@
   },
   "scripts": {
     "build": "tsup",
+    "build:bin": "bun build ./src/index.ts --compile --outfile dist/textmine",
     "dev": "tsup --watch",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
