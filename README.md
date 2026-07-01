@@ -7,9 +7,68 @@ MCP. MCP remains the tool protocol for agents; this CLI is the developer- and
 script-friendly path.
 
 > Status: **v1, initial scope.** This first cut covers authentication, profiles,
-> configuration, diagnostics, and vaults. Documents, document-types, and tasks,
-> plus standalone-binary packaging and a Homebrew tap, are tracked as follow-ups
-> (see [Roadmap](#roadmap)).
+> configuration, diagnostics, and vaults, and ships as a Homebrew formula and
+> prebuilt binaries. Documents, document-types, and tasks are tracked as
+> follow-ups (see [Roadmap](#roadmap)).
+
+## Get started in 60 seconds
+
+Three steps: **install → authenticate → run.**
+
+```bash
+# 1. Install (Homebrew — macOS & Linux)
+brew install TXMLTD/tap/textmine-cli
+
+# 2. Authenticate with your API key (create one in the TextMine app; it looks like tm_...)
+textmine auth login --api-key tm_...
+
+# 3. Run
+textmine vaults list
+```
+
+That's it. `auth login` verifies the key against the API before saving it, so if
+this step succeeds you're fully configured. Check your setup any time with
+`textmine auth status` or `textmine doctor`.
+
+## Install
+
+### Homebrew (recommended)
+
+Works on macOS (Apple Silicon & Intel) and Linux (x64):
+
+```bash
+brew install TXMLTD/tap/textmine-cli
+```
+
+To upgrade later:
+
+```bash
+brew upgrade textmine-cli
+```
+
+### Prebuilt binary (manual)
+
+If you'd rather not use Homebrew, download the binary for your platform, drop it
+on your `PATH`, and you're done — no Node.js and no build step required.
+
+| Platform              | Asset                                    |
+| --------------------- | ---------------------------------------- |
+| macOS (Apple Silicon) | `textmine-cli-0.1.0-darwin-arm64.tar.gz` |
+| macOS (Intel)         | `textmine-cli-0.1.0-darwin-x64.tar.gz`   |
+| Linux (x64)           | `textmine-cli-0.1.0-linux-x64.tar.gz`    |
+
+```bash
+# Pick the value for your platform from the table above:
+PLATFORM=darwin-arm64   # or darwin-x64, or linux-x64
+
+curl -fsSL "https://github.com/TXMLTD/textmine-cli/releases/download/v0.1.0/textmine-cli-0.1.0-${PLATFORM}.tar.gz" \
+  | tar -xz
+sudo mv textmine /usr/local/bin/
+textmine --help
+```
+
+> On macOS the first run may be blocked by Gatekeeper. If so, clear the
+> quarantine flag with `xattr -d com.apple.quarantine /usr/local/bin/textmine`.
 
 ## Install (development)
 
@@ -20,12 +79,6 @@ node dist/index.js --help
 # or link it onto your PATH as `textmine`:
 npm link
 textmine --help
-```
-
-The eventual installation experience will be:
-
-```bash
-brew install textmine/tap/textmine-cli
 ```
 
 ## Quickstart
@@ -156,7 +209,6 @@ These are intentionally out of the initial scope:
 - `documents` — list/upload/get/text/metadata/tags/download-url/rename/reprocess
 - `document-types` — list/get/create
 - `tasks` — list/create/get/events/message/start/cancel
-- Standalone versioned binaries (`textmine-darwin-arm64`, …) via `pkg`/Bun
-- Homebrew tap (`github.com/textmine/homebrew-tap`) + release automation
+- Release automation (auto-publish binaries + bump the Homebrew formula on tag)
 - OS keychain credential backend
 - Aligning the API client with the Public API V3 OpenAPI spec to prevent drift
