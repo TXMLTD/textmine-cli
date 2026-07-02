@@ -3,7 +3,10 @@ import { registerApi } from "./commands/api.js";
 import { registerAuth } from "./commands/auth.js";
 import { registerConfig } from "./commands/config.js";
 import { registerDoctor } from "./commands/doctor.js";
+import { registerDocumentTypes } from "./commands/document-types.js";
+import { registerDocuments } from "./commands/documents.js";
 import { registerProfile } from "./commands/profile.js";
+import { registerTasks } from "./commands/tasks.js";
 import { registerVaults } from "./commands/vaults.js";
 import { CliError } from "./lib/errors.js";
 import { isJsonMode, printNote, setJsonMode } from "./lib/output.js";
@@ -31,6 +34,9 @@ function buildProgram(): Command {
   registerApi(program);
   registerDoctor(program);
   registerVaults(program);
+  registerDocuments(program);
+  registerDocumentTypes(program);
+  registerTasks(program);
 
   return program;
 }

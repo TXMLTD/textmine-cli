@@ -6,10 +6,9 @@ The CLI talks **directly** to the Public API over HTTPS — it does not go throu
 MCP. MCP remains the tool protocol for agents; this CLI is the developer- and
 script-friendly path.
 
-> Status: **v1, initial scope.** This first cut covers authentication, profiles,
-> configuration, diagnostics, and vaults, and ships as a Homebrew formula and
-> prebuilt binaries. Documents, document-types, and tasks are tracked as
-> follow-ups (see [Roadmap](#roadmap)).
+> Status: **v1.** Covers authentication, profiles, configuration, diagnostics,
+> vaults, documents, document-types, and tasks, and ships as a Homebrew formula
+> and prebuilt binaries.
 
 ## Get started in 60 seconds
 
@@ -167,6 +166,30 @@ textmine doctor                          # config + connectivity diagnostics
 textmine vaults list                     # GET /v3/vaults
 textmine vaults get <vault-id>           # GET /v3/vaults/{id}
 textmine vaults create "<name>"          # POST /v3/vaults
+
+# Documents (also available as `textmine docs`)
+textmine documents list --vault <id>     # GET /v3/documents?vault_id=<id>
+textmine documents upload ./file.pdf --vault <id> --document-type <id>
+                                         # POST /v3/documents (multipart)
+textmine documents get <doc-id>          # GET /v3/documents/{id}
+textmine documents text <doc-id>         # GET /v3/documents/{id}/text
+textmine documents metadata <doc-id>     # GET /v3/documents/{id}/metadata
+textmine documents tags <doc-id>         # GET /v3/documents/{id}/tags
+textmine documents download-url <doc-id> # GET /v3/documents/{id}/download-url
+textmine documents rename <doc-id> "New name.pdf"   # PATCH /v3/documents/{id}
+textmine documents reprocess <doc-id>    # POST /v3/documents/{id}/reprocess
+
+textmine document-types list             # GET /v3/document-types
+textmine document-types get <type-id>    # GET /v3/document-types/{id}
+textmine document-types create "MSA"     # POST /v3/document-types
+
+textmine tasks list                      # GET /v3/tasks
+textmine tasks create "Review contract"  # POST /v3/tasks
+textmine tasks get <task-id>             # GET /v3/tasks/{id}
+textmine tasks events <task-id>          # GET /v3/tasks/{id}/events
+textmine tasks message <task-id> "..."   # POST /v3/tasks/{id}/messages
+textmine tasks start <task-id>           # POST /v3/tasks/{id}/start
+textmine tasks cancel <task-id>          # POST /v3/tasks/{id}/cancel
 ```
 
 ## Output modes
@@ -206,9 +229,6 @@ npm run build       # bundle to dist/index.js
 
 These are intentionally out of the initial scope:
 
-- `documents` — list/upload/get/text/metadata/tags/download-url/rename/reprocess
-- `document-types` — list/get/create
-- `tasks` — list/create/get/events/message/start/cancel
 - Release automation (auto-publish binaries + bump the Homebrew formula on tag)
 - OS keychain credential backend
 - Aligning the API client with the Public API V3 OpenAPI spec to prevent drift

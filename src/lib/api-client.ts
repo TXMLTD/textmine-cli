@@ -11,8 +11,14 @@ export interface RequestOptions {
   method?: "GET" | "POST" | "PATCH" | "DELETE";
   /** Query parameters; undefined/null values are skipped. */
   query?: Record<string, string | number | boolean | undefined | null>;
-  /** JSON request body. */
+  /** JSON request body. Ignored when `form` is provided. */
   body?: unknown;
+  /**
+   * Multipart form body (e.g. file uploads). When set, the body is sent as
+   * multipart/form-data and `body` is ignored. `fetch` sets the boundary
+   * Content-Type header itself, so we must not set it manually.
+   */
+  form?: FormData;
 }
 
 export class ApiClient {
@@ -34,8 +40,11 @@ export class ApiClient {
       Authorization: `Bearer ${this.apiKey}`,
       Accept: "application/json",
     };
-    let payload: string | undefined;
-    if (options.body !== undefined) {
+    let payload: string | FormData | undefined;
+    if (options.form !== undefined) {
+      // Let fetch set the multipart Content-Type (with its boundary).
+      payload = options.form;
+    } else if (options.body !== undefined) {
       headers["Content-Type"] = "application/json";
       payload = JSON.stringify(options.body);
     }
