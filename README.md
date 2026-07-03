@@ -181,7 +181,7 @@ textmine documents reprocess <doc-id>    # POST /v3/documents/{id}/reprocess
 
 textmine document-types list             # GET /v3/document-types
 textmine document-types get <type-id>    # GET /v3/document-types/{id}
-textmine document-types create "MSA"     # POST /v3/document-types
+textmine document-types create "MSA" --vault <id>   # POST /v3/document-types (vault required)
 
 textmine tasks list                      # GET /v3/tasks
 textmine tasks create "Review contract"  # POST /v3/tasks
@@ -191,6 +191,16 @@ textmine tasks message <task-id> "..."   # POST /v3/tasks/{id}/messages
 textmine tasks start <task-id>           # POST /v3/tasks/{id}/start
 textmine tasks cancel <task-id>          # POST /v3/tasks/{id}/cancel
 ```
+
+> **Document types are scoped to a vault.** `document-types create` requires a
+> `--vault <id>` — without it the API rejects the request with
+> `400: vault_id or vault_ids is required; create or select a vault before
+> configuring document types`. Use `textmine vaults list` to find a vault id (or
+> `textmine vaults create "<name>"` to make one) before creating a document type:
+>
+> ```bash
+> textmine document-types create "MSA" --vault <id>
+> ```
 
 ## Output modes
 
