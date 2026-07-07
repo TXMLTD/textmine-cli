@@ -31,9 +31,8 @@ export function registerVaults(program: Command): void {
         const rows = items.map((v) => ({
           id: v.id ?? "",
           name: vaultName(v) ?? "",
-          documents: v.documentCount ?? "",
         }));
-        printTable(rows, ["id", "name", "documents"]);
+        printTable(rows, ["id", "name"]);
       });
     });
 
